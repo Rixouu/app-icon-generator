@@ -1,0 +1,33 @@
+.phone-mockup {
+  width: 300px;
+  height: 600px;
+  background-color: #f0f0f0;
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.phone-mockup.android {
+  background-image: url('/android-mockup.png');
+  background-size: cover;
+}
+
+.phone-mockup.ios {
+  background-image: url('/ios-mockup.png');
+  background-size: cover;
+}
+
+.icon-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.app-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+}
