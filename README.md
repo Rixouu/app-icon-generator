@@ -1,6 +1,6 @@
-# Icon Generator
+# App Icon Generator
 
-Icon Generator is a web application that allows users to create custom icons for Android and iOS platforms. Users can upload images, apply various settings, and generate icon sets suitable for mobile app development.
+App Icon Generator is a web application that allows users to create custom icons for Android and iOS platforms. Users can upload images, apply various settings, and generate icon sets suitable for mobile app development.
 
 ## Features
 
@@ -15,13 +15,15 @@ Icon Generator is a web application that allows users to create custom icons for
 - Real-time preview of the icon with applied settings
 - Dark mode support for better user experience
 - Download generated icon sets as a ZIP file
+- Improved UI and UX for a more intuitive experience
 
 ## Technologies Used
 
-- Next.js
+- Next.js 13
 - React
 - TypeScript
 - Tailwind CSS
+- Shadcn UI
 
 ## Getting Started
 
@@ -35,13 +37,13 @@ Icon Generator is a web application that allows users to create custom icons for
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/icon-generator.git
+   git clone https://github.com/Rixouu/app-icon-generator.git
    ```
 
 2. Navigate to the project directory:
 
    ```
-   cd icon-generator
+   cd app-icon-generator
    ```
 
 3. Install dependencies:
@@ -78,6 +80,14 @@ Icon Generator is a web application that allows users to create custom icons for
 4. Preview the icon in real-time on the right side of the page.
 5. Click the "Download Icons" button to generate and download the icon set.
 
+## Recent Improvements
+
+- Enhanced UI design for a more modern and user-friendly interface
+- Improved UX with more intuitive controls and feedback
+- Added support for additional icon shapes and effects
+- Optimized icon generation process for faster performance
+- Implemented responsive design for better mobile experience
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -92,6 +102,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Shadcn UI](https://ui.shadcn.com/)
 
 ## Contact
 
