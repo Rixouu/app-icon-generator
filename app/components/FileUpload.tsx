@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -7,6 +7,7 @@ interface FileUploadProps {
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [dragActive, setDragActive] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -17,10 +18,17 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => 
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragActive(false);
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setDragActive(false);
     const file = event.dataTransfer.files?.[0];
     if (file) {
       onFileUpload(file);
@@ -33,12 +41,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => 
 
   return (
     <div
-      className={`w-full p-6 mb-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-300 ${
+      className={`w-full p-4 mb-4 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-300 ${
         isDarkMode
-          ? 'bg-gray-800 border-gray-600 hover:bg-gray-700'
-          : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
+          ? dragActive ? 'bg-gray-700 border-blue-500' : 'bg-gray-800 border-gray-600 hover:bg-gray-700'
+          : dragActive ? 'bg-blue-50 border-blue-500' : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
       }`}
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={triggerFileInput}
     >
@@ -65,11 +74,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => 
             strokeLinejoin="round"
           />
         </svg>
-        <p className={`mt-1 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          <span className="font-medium">Click to upload</span> or drag and drop
-        </p>
-        <p className={`mt-1 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          PNG, JPG, GIF up to 10MB
+        <p className={`mt-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          Click to upload or drag and drop
         </p>
       </div>
     </div>

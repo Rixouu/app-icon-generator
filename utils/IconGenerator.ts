@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs/promises';
-import { IconSettingsType } from '../app/page';
+import { IconSettingsType } from '../app/components/types';
 
 export async function generateIcons(filePath: string, settings: IconSettingsType & { iconType: string }) {
   try {
@@ -29,69 +29,81 @@ export async function generateIcons(filePath: string, settings: IconSettingsType
       try {
         let sharpInstance = sharp(filePath);
 
+        // Apply scaling
+        const paddedSize = size - (settings.padding * 2);
         if (settings.scaling === 'crop') {
           sharpInstance = sharpInstance
-            .resize(size, size, { 
-              fit: 'cover', 
-              position: 'center'
-            })
-            .extract({ left: 0, top: 0, width: size, height: size });
-        } else { // 'center' or any other option
+            .resize(paddedSize, paddedSize, { fit: 'cover', position: 'center' });
+        } else { // 'center'
           sharpInstance = sharpInstance
-            .resize(size, size, { 
+            .resize(paddedSize, paddedSize, { 
               fit: 'contain', 
               background: { r: 0, g: 0, b: 0, alpha: 0 }
             });
         }
 
-        if (settings.mask) {
+        // Apply shape
+        if (settings.shape !== 'square') {
+          let maskBuffer;
           if (settings.shape === 'circle') {
+            maskBuffer = Buffer.from(`
+              <svg width="${paddedSize}" height="${paddedSize}">
+                <circle cx="${paddedSize/2}" cy="${paddedSize/2}" r="${paddedSize/2}" fill="black"/>
+              </svg>
+            `);
+          } else if (settings.shape === 'squircle') {
+            const radius = paddedSize * 0.2;
+            maskBuffer = Buffer.from(`
+              <svg width="${paddedSize}" height="${paddedSize}">
+                <rect x="0" y="0" width="${paddedSize}" height="${paddedSize}" rx="${radius}" ry="${radius}" fill="black"/>
+              </svg>
+            `);
+          }
+
+          if (maskBuffer) {
             sharpInstance = sharpInstance.composite([{
-              input: Buffer.from(`<svg><circle cx="${size/2}" cy="${size/2}" r="${size/2}" fill="black"/></svg>`),
+              input: maskBuffer,
               blend: 'dest-in'
             }]);
-          } else if (settings.shape === 'squircle') {
-            const mask = await sharp({
-              create: {
-                width: size,
-                height: size,
-                channels: 4,
-                background: { r: 255, g: 255, b: 255, alpha: 1 }
-              }
-            })
-            .composite([{
-              input: Buffer.from(`<svg><rect x="0" y="0" width="${size}" height="${size}" rx="${size * 0.2}" ry="${size * 0.2}" fill="white"/></svg>`),
-              blend: 'dest-in'
-            }])
-            .toBuffer();
-
-            sharpInstance = sharpInstance.composite([{ input: mask, blend: 'dest-in' }]);
           }
         }
 
+        // Apply effects
         if (settings.effect === 'shadow') {
           const shadow = await sharp({
-            create: { width: size + 10, height: size + 10, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.2 } }
+            create: { width: paddedSize + 10, height: paddedSize + 10, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.2 } }
           }).blur(5).toBuffer();
           
           sharpInstance = sharpInstance
             .extend({ top: 5, bottom: 5, left: 5, right: 5, background: { r: 0, g: 0, b: 0, alpha: 0 } })
             .composite([{ input: shadow }, { input: await sharpInstance.toBuffer() }]);
+        } else if (settings.effect === 'gloss') {
+          const gloss = Buffer.from(`
+            <svg width="${paddedSize}" height="${paddedSize}">
+              <defs>
+                <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:white;stop-opacity:0.4" />
+                  <stop offset="50%" style="stop-color:white;stop-opacity:0.1" />
+                  <stop offset="50%" style="stop-color:white;stop-opacity:0" />
+                  <stop offset="100%" style="stop-color:white;stop-opacity:0.1" />
+                </linearGradient>
+              </defs>
+              <rect x="0" y="0" width="${paddedSize}" height="${paddedSize}" fill="url(#gloss)" />
+            </svg>
+          `);
+          sharpInstance = sharpInstance.composite([{ input: gloss, blend: 'over' }]);
         }
 
-        if ('type' in settings.background && settings.background.type === 'color') {
-          sharpInstance = sharpInstance.flatten({ background: settings.background.color });
-        }
-
-        if (settings.padding > 0) {
-          sharpInstance = sharpInstance.extend({
+        // Apply background color and padding
+        sharpInstance = sharpInstance
+          .extend({
             top: settings.padding,
             bottom: settings.padding,
             left: settings.padding,
             right: settings.padding,
-            background: { r: 0, g: 0, b: 0, alpha: 0 }
-          });
-        }
+            background: { r: 0, g: 0, b: 0, alpha: 0 } // Start with transparent background
+          })
+          .flatten({ background: settings.background.color }); // Apply background color
 
         await sharpInstance.toFile(outputPath);
         console.log(`Successfully generated icon: ${outputPath}`);

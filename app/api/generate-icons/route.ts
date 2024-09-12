@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
 import { generateIcons } from '@/utils/IconGenerator';
+import fs from 'fs/promises';
 import archiver from 'archiver';
 
 export async function GET() {
@@ -8,57 +8,50 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  console.log('POST request received');
   try {
-    const data = await req.formData();
-    console.log('FormData received:', data);
+    const formData = await req.formData();
+    const iconType = formData.get('iconType') as string;
+    const settings = JSON.parse(formData.get('settings') as string);
+    const file = formData.get('file') as File;
 
-    const file = data.get('file') as File;
-    const settings = JSON.parse(data.get('settings') as string);
-    const iconType = data.get('iconType') as string;
+    const tempFilePath = `/tmp/uploaded_image_${Date.now()}.png`;
+    const arrayBuffer = await file.arrayBuffer();
+    await fs.writeFile(tempFilePath, Buffer.from(arrayBuffer));
 
-    console.log('Parsed data:', { iconType, settings });
+    const icons = await generateIcons(tempFilePath, { ...settings, iconType });
 
-    if (!file) {
-      console.error('No file uploaded');
-      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
-    }
-
-    const buffer = await file.arrayBuffer();
-    const filePath = `/tmp/${file.name}`;
-    await fs.promises.writeFile(filePath, Buffer.from(buffer));
-    console.log(`File written to ${filePath}`);
-
-    const icons = await generateIcons(filePath, { ...settings, iconType });
-    console.log(`Icons generated: ${icons.length}`);
-    
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const chunks: Uint8Array[] = [];
-
-    archive.on('data', (chunk) => chunks.push(chunk));
-    archive.on('end', () => console.log('Archiving completed'));
-
-    icons.forEach((icon) => {
-      archive.append(fs.createReadStream(icon.path), { name: icon.name });
+    // Create a zip file
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Sets the compression level
     });
 
-    await archive.finalize();
-    console.log('Archive finalized');
+    const chunks: Uint8Array[] = [];
+    archive.on('data', (chunk) => chunks.push(chunk));
+    archive.on('end', () => {});
 
-    const zipBuffer = Buffer.concat(chunks);
+    for (const icon of icons) {
+      const fileContent = await fs.readFile(icon.path);
+      archive.append(fileContent, { name: icon.name });
+    }
+
+    await archive.finalize();
 
     // Clean up temporary files
-    await fs.promises.unlink(filePath);
-    await Promise.all(icons.map(icon => fs.promises.unlink(icon.path)));
-    console.log('Temporary files cleaned up');
+    await fs.unlink(tempFilePath);
+    for (const icon of icons) {
+      await fs.unlink(icon.path);
+    }
+
+    const zipBuffer = Buffer.concat(chunks);
 
     return new NextResponse(zipBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/zip',
-        'Content-Disposition': 'attachment; filename=generated-icons.zip',
-      },
+        'Content-Disposition': 'attachment; filename=icons.zip'
+      }
     });
+
   } catch (error) {
     console.error('Detailed error in generate-icons:', error);
     return NextResponse.json({ 

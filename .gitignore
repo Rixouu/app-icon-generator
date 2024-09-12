@@ -1,5 +1,30 @@
- node_modules/
-   .next/
-   .env
-   .env.local
-node_modules
+   # Dependencies
+   /node_modules
+   /.pnp
+   .pnp.js
+
+   # Next.js build output
+   /.next/
+   /out/
+
+   # Production build
+   /build
+
+   # Misc
+   .DS_Store
+   *.pem
+
+   # Debug logs
+   npm-debug.log*
+   yarn-debug.log*
+   yarn-error.log*
+
+   # Local env files
+   .env*.local
+
+   # Vercel
+   .vercel
+
+   # TypeScript
+   *.tsbuildinfo
+   next-env.d.ts

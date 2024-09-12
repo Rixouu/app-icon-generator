@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconSettingsType } from '../page';
+import { IconSettingsType } from './types';
 
 interface IconSettingsProps {
   settings: IconSettingsType;
@@ -8,38 +8,27 @@ interface IconSettingsProps {
 }
 
 const IconSettings: React.FC<IconSettingsProps> = ({ settings, onSettingsChange, isDarkMode }) => {
-  const inputClass = `w-full px-3 py-2 rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
-    } border ${isDarkMode ? 'border-gray-600' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`;
+  const inputClass = `w-full px-3 py-2 rounded-md ${
+    isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+  } border ${
+    isDarkMode ? 'border-gray-600' : 'border-gray-300'
+  } focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200`;
 
-  const labelClass = `block mb-2 font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`;
-
-  const selectClass = `${inputClass} appearance-none`;
+  const labelClass = `block mb-2 text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-y-auto flex-grow">
       <div>
         <label className={labelClass} htmlFor="scalingSelect">Scaling</label>
         <select
           id="scalingSelect"
           value={settings.scaling}
           onChange={(e) => onSettingsChange({ scaling: e.target.value as 'center' | 'crop' })}
-          className={selectClass}
+          className={inputClass}
         >
           <option value="center">Center</option>
           <option value="crop">Crop</option>
         </select>
-      </div>
-
-      <div>
-        <label className={labelClass}>
-          <input
-            type="checkbox"
-            checked={settings.mask}
-            onChange={(e) => onSettingsChange({ mask: e.target.checked })}
-            className="mr-2 rounded"
-          />
-          Apply Mask
-        </label>
       </div>
 
       <div>
@@ -48,8 +37,7 @@ const IconSettings: React.FC<IconSettingsProps> = ({ settings, onSettingsChange,
           id="effectSelect"
           value={settings.effect}
           onChange={(e) => onSettingsChange({ effect: e.target.value as 'none' | 'shadow' | 'gloss' })}
-          className={selectClass}
-          aria-label="Effect"
+          className={inputClass}
         >
           <option value="none">None</option>
           <option value="shadow">Shadow</option>
@@ -61,35 +49,46 @@ const IconSettings: React.FC<IconSettingsProps> = ({ settings, onSettingsChange,
         <label className={labelClass} htmlFor="paddingInput">Padding</label>
         <input
           id="paddingInput"
-          type="number"
-          value={settings.padding}
-          onChange={(e) => onSettingsChange({ padding: Math.max(0, Math.min(100, parseInt(e.target.value, 10) || 0)) })}
-          className={inputClass}
+          type="range"
           min="0"
           max="100"
-          aria-label="Padding"
+          value={settings.padding}
+          onChange={(e) => onSettingsChange({ padding: parseInt(e.target.value, 10) })}
+          className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
         />
+        <span className={`block mt-1 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          {settings.padding}px
+        </span>
       </div>
 
       <div>
         <label className={labelClass} htmlFor="bgColor">Background Color</label>
-        <input
-          id="bgColor"
-          type="color"
-          value={settings.background.color}
-          onChange={(e) => onSettingsChange({ background: { color: e.target.value } })}
-          className={`${inputClass} h-10`}
-          aria-label="Background Color"
-        />
+        <div className="flex items-center">
+          <input
+            id="bgColor"
+            type="color"
+            value={settings.background.color}
+            onChange={(e) => onSettingsChange({ 
+              background: { 
+                color: e.target.value,
+                type: settings.background.type
+              } 
+            })}
+            className={`${inputClass} h-10 w-10 p-0 rounded-full`}
+          />
+          <span className={`ml-3 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            {settings.background.color}
+          </span>
+        </div>
       </div>
 
       <div>
-        <label className={labelClass}>Shape</label>
+        <label className={labelClass} htmlFor="shapeSelect">Shape</label>
         <select
+          id="shapeSelect"
           value={settings.shape}
           onChange={(e) => onSettingsChange({ shape: e.target.value as 'square' | 'circle' | 'squircle' })}
-          className={selectClass}
-          aria-label="Shape"
+          className={inputClass}
         >
           <option value="square">Square</option>
           <option value="circle">Circle</option>
