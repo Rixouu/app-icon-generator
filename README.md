@@ -40,7 +40,7 @@ See the [Sharp installation docs](https://sharp.pixelplumbing.com/install) for m
 ## Getting started
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Rixouu/app-icon-generator.git
 cd app-icon-generator
 npm install
 npm run dev
