@@ -1,110 +1,90 @@
 # App Icon Generator
 
-App Icon Generator is a web application that allows users to create custom icons for Android and iOS platforms. Users can upload images, apply various settings, and generate icon sets suitable for mobile app development.
+A small **Next.js** web app for turning one source image into a **ZIP of PNG icons** sized for **Android** or **iOS** launcher and asset slots. Processing runs on the server with **[Sharp](https://sharp.pixelplumbing.com/)**; the UI is **React** with **Tailwind CSS**, **Google Sans** (via [Google Fonts](https://fonts.google.com/specimen/Google+Sans)), and a **light / dark** theme.
 
 ## Features
 
-- Upload custom images for icon generation
-- Switch between Android and iOS icon types
-- Customize icon settings:
-  - Scaling (center or crop)
-  - Shape (square, circle, or squircle)
-  - Effect (none, shadow, or gloss)
-  - Padding
-  - Background color
-- Real-time preview of the icon with applied settings
-- Dark mode support for better user experience
-- Download generated icon sets as a ZIP file
-- Improved UI and UX for a more intuitive experience
+- **Platform presets** — Android (6 sizes) or iOS (12 standard point sizes).
+- **Scaling** — *Center (contain)* or *Crop (cover)*, aligned with Sharp’s resize behavior.
+- **Shape** — Square, circle, or squircle (mask applied before export).
+- **Effects** — None, shadow, or gloss (preview matches server output).
+- **Padding** — Uniform padding inside the final square; inner artwork scales to the remaining area.
+- **Background** — Solid fill **or** **transparent export** (PNG alpha for padding and letterboxing).
+- **Live preview** — Canvas preview; checkerboard when background is transparent.
+- **Download** — Single `icons.zip` of PNG files; errors surfaced in the UI when the API returns JSON.
 
-## Technologies Used
+## Tech stack
 
-- Next.js 13
-- React
-- TypeScript
-- Tailwind CSS
-- Shadcn UI
+| Area | Choice |
+|------|--------|
+| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
+| UI | [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
+| Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
+| Images | [Sharp](https://sharp.pixelplumbing.com/) |
+| Archives | [archiver](https://www.archiverjs.com/) (ZIP) |
+| Lint | [ESLint 9](https://eslint.org/) + `eslint-config-next` |
 
-## Getting Started
+## Requirements
 
-### Prerequisites
+- **Node.js** 20.x or newer is recommended (matches current Next / ESLint expectations).
+- **npm** (ships with Node).
 
-- Node.js (v14 or later)
-- npm or yarn
+Sharp installs **platform-specific native binaries**. If you see errors like *Could not load the "sharp" module*, reinstall for your OS/CPU:
 
-### Installation
+```bash
+npm install --include=optional sharp
+```
 
-1. Clone the repository:
+See the [Sharp installation docs](https://sharp.pixelplumbing.com/install) for more options.
 
-   ```
-   git clone https://github.com/Rixouu/app-icon-generator.git
-   ```
+## Getting started
 
-2. Navigate to the project directory:
+```bash
+git clone <your-repo-url>
+cd app-icon-generator
+npm install
+npm run dev
+```
 
-   ```
-   cd app-icon-generator
-   ```
+Open [http://localhost:3000](http://localhost:3000).
 
-3. Install dependencies:
+### Scripts
 
-   ```
-   npm install
-   ```
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server (Turbopack) |
+| `npm run build` | Production build |
+| `npm start` | Run production server (after `build`) |
+| `npm run lint` | ESLint (`eslint .`, flat config) |
 
-   or
+## How it works
 
-   ```
-   yarn install
-   ```
+1. The browser **POST**s `multipart/form-data` to `/api/generate-icons` with the image file, platform key, and JSON **settings**.
+2. The route writes a temporary upload, calls **`generateIcons()`** in [`utils/IconGenerator.ts`](utils/IconGenerator.ts), then streams a **ZIP** of PNGs.
+3. **Sharp** resizes, masks, applies effects, extends padding, then either **flattens** to a solid background or writes **transparent** PNGs.
+4. Temp upload and generated files under `temp/` are removed in a **`finally`** block.
 
-4. Run the development server:
+`next.config.mjs` lists **`sharp`** and **`archiver`** in **`serverExternalPackages`** so they are not bundled incorrectly on the server.
 
-   ```
-   npm run dev
-   ```
+## Project layout
 
-   or
+```
+app/
+  api/generate-icons/route.ts   # POST handler + ZIP response
+  components/                   # UI pieces (preview, settings, theme sync, …)
+  globals.css                   # Theme tokens + Google Sans import
+  layout.tsx
+  page.tsx
+utils/
+  IconGenerator.ts              # Sharp pipeline
+```
 
-   ```
-   yarn dev
-   ```
+## Deployment notes
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
-## Usage
-
-1. Select the icon type (Android or iOS) using the toggle at the top of the page.
-2. Upload an image using the "Upload Icon" section.
-3. Customize the icon settings using the provided options.
-4. Preview the icon in real-time on the right side of the page.
-5. Click the "Download Icons" button to generate and download the icon set.
-
-## Recent Improvements
-
-- Enhanced UI design for a more modern and user-friendly interface
-- Improved UX with more intuitive controls and feedback
-- Added support for additional icon shapes and effects
-- Optimized icon generation process for faster performance
-- Implemented responsive design for better mobile experience
+- The app expects a **Node** runtime (filesystem temp paths, native Sharp).
+- Ensure the host installs **optional dependencies** so Sharp matches the deployment OS/architecture.
+- Do not commit **`.next/`** or **`node_modules/`**; they are listed in `.gitignore`.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Next.js](https://nextjs.org/)
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Shadcn UI](https://ui.shadcn.com/)
-
-## Contact
-
-Jonathan Rycx
-<https://www.linkedin.com/in/jonathanrycx/>
+Issues and pull requests are welcome. Please run **`npm run build`** and **`npm run lint`** before submitting changes.

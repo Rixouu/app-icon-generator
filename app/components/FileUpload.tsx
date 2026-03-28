@@ -2,18 +2,15 @@ import React, { useRef, useState } from 'react';
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
-  isDarkMode: boolean;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      onFileUpload(file);
-    }
+    if (file) onFileUpload(file);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -30,26 +27,28 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => 
     event.preventDefault();
     setDragActive(false);
     const file = event.dataTransfer.files?.[0];
-    if (file) {
-      onFileUpload(file);
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
+    if (file) onFileUpload(file);
   };
 
   return (
     <div
-      className={`w-full p-4 mb-4 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-300 ${
-        isDarkMode
-          ? dragActive ? 'bg-gray-700 border-blue-500' : 'bg-gray-800 border-gray-600 hover:bg-gray-700'
-          : dragActive ? 'bg-blue-50 border-blue-500' : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
+      className={`mb-6 w-full cursor-pointer rounded-xl border-2 border-dashed p-6 transition-colors ${
+        dragActive
+          ? 'border-ring bg-muted'
+          : 'border-border bg-muted/40 hover:bg-muted/70'
       }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={triggerFileInput}
+      onClick={() => fileInputRef.current?.click()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          fileInputRef.current?.click();
+        }
+      }}
+      role="button"
+      tabIndex={0}
     >
       <input
         type="file"
@@ -57,26 +56,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isDarkMode }) => 
         onChange={handleFileChange}
         accept="image/*"
         className="hidden"
-        aria-label="Upload file"
+        aria-label="Upload image file"
       />
       <div className="text-center">
-        <svg
-          className={`mx-auto h-12 w-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
-          stroke="currentColor"
-          fill="none"
-          viewBox="0 0 48 48"
-          aria-hidden="true"
-        >
-          <path
-            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <p className={`mt-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          Click to upload or drag and drop
-        </p>
+        <p className="text-sm font-medium text-foreground">Drop an image here</p>
+        <p className="mt-1 text-xs text-muted-foreground">or click to browse — PNG, JPG, WebP</p>
       </div>
     </div>
   );

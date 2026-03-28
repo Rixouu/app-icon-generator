@@ -2,6 +2,8 @@
 export interface IconSettingsType {
   background: {
     color: string;
+    /** When true, exported PNGs keep alpha; padding and letterboxing are transparent. */
+    transparent?: boolean;
     type: 'solid' | 'gradient';
     gradient?: {
       type: 'linear' | 'radial';
@@ -68,10 +70,9 @@ export interface ExportOptionsType {
 // Component Props
 export interface IconPreviewProps {
   iconType: 'android' | 'ios' | 'web';
-  uploadedImage: File | null; // Add this line
+  uploadedImage: File | null;
   settings: IconSettingsType;
-  isDarkMode: boolean; // Add this line
-  size?: number; // Make this optional since it's not used in the current implementation
+  size?: number;
 }
 
 export interface IconGeneratorProps {

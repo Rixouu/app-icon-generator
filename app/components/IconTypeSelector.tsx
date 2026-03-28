@@ -3,32 +3,28 @@ import React from 'react';
 interface IconTypeSelectorProps {
   selectedType: 'android' | 'ios';
   onTypeChange: (type: 'android' | 'ios') => void;
-  isDarkMode: boolean;
 }
 
 const IconTypeSelector: React.FC<IconTypeSelectorProps> = ({
   selectedType,
   onTypeChange,
-  isDarkMode,
 }) => {
   return (
     <div className="mb-4">
-      <div className={`flex rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} p-1`}>
-        {['android', 'ios'].map((type) => (
+      <p className="text-sm font-medium text-muted-foreground mb-2">Platform</p>
+      <div className="flex rounded-xl border border-border bg-muted/50 p-1">
+        {(['android', 'ios'] as const).map((type) => (
           <button
             key={type}
-            className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+            type="button"
+            className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
               selectedType === type
-                ? isDarkMode
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-800 shadow'
-                : isDarkMode
-                ? 'text-gray-300 hover:bg-gray-600'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-card text-foreground shadow-sm border border-border'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
-            onClick={() => onTypeChange(type as 'android' | 'ios')}
+            onClick={() => onTypeChange(type)}
           >
-            {type === 'android' ? '🤖 Android' : '🍎 iOS'}
+            {type === 'android' ? 'Android' : 'iOS'}
           </button>
         ))}
       </div>

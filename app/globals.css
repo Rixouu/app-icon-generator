@@ -1,23 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-google-sans: 'Google Sans', system-ui, sans-serif;
+  --background: #f4f6fb;
+  --foreground: #0c1222;
+  --muted: #e8ecf4;
+  --muted-foreground: #5c6578;
+  --card: #ffffff;
+  --card-foreground: #0c1222;
+  --border: #d8dee9;
+  --ring: #3b6cf0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #080c14;
+  --foreground: #eef1f7;
+  --muted: #141b2a;
+  --muted-foreground: #9aa3b5;
+  --card: #0f1522;
+  --card-foreground: #eef1f7;
+  --border: #252f42;
+  --ring: #6b8cff;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-google-sans);
 }
 
 @layer utilities {
