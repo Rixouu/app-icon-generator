@@ -193,7 +193,7 @@ No `LICENSE` file is included in this repository; usage terms are at the maintai
 
 - [Next.js](https://nextjs.org/) team for the App Router and metadata APIs
 - [Sharp](https://sharp.pixelplumbing.com/) for fast image pipelines
-- [Split The G](https://github.com/Rixouu/split-the-g) for README + PWA install UX inspiration
+
 
 ---
 

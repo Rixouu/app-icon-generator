@@ -12,7 +12,7 @@ import { PwaInstallBanner } from './components/PwaInstallBanner';
 
 export default function Home() {
   const [iconType, setIconType] = useState<'android' | 'ios'>('android');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [iconSettings, setIconSettings] = useState<IconSettingsType>({
@@ -102,7 +102,7 @@ export default function Home() {
       <ThemeSync isDark={isDarkMode} />
       <PwaInstallBanner />
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14">
+        <div className="container mx-auto max-w-6xl px-3 py-6 sm:px-4 sm:py-10 md:py-14">
           <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
@@ -137,7 +137,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
             <div className="w-full shrink-0 lg:w-[340px]">
-              <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm sm:rounded-2xl">
                 <IconTypeSelector selectedType={iconType} onTypeChange={setIconType} />
                 <FileUpload onFileUpload={handleImageUpload} />
                 <IconSettings
@@ -148,10 +148,10 @@ export default function Home() {
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-8">
-              <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm sm:rounded-2xl">
                 <IconPreview iconType={iconType} uploadedImage={uploadedImage} settings={iconSettings} />
               </div>
-              <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm sm:rounded-2xl">
                 <DownloadSection onDownload={handleDownload} disabled={!uploadedImage} iconType={iconType} />
               </div>
             </div>

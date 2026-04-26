@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const THEME = '#7044ff';
+const THEME = '#6A3DE8';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -16,13 +16,19 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['utilities', 'productivity', 'developer tools'],
     icons: [
       {
-        src: '/icon-app-icon-generator.png',
+        src: '/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/icon-512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: '/icon-app-icon-generator.png',
+        src: '/icon-512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable',
