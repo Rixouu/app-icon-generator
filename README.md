@@ -1,43 +1,83 @@
-# App Icon Generator
+# 🎨 App Icon Generator
 
-A small **Next.js** web app for turning one source image into a **ZIP of PNG icons** sized for **Android** or **iOS** launcher and asset slots. Processing runs on the server with **[Sharp](https://sharp.pixelplumbing.com/)**; the UI is **React** with **Tailwind CSS**, **Google Sans** (via [Google Fonts](https://fonts.google.com/specimen/Google+Sans)), and a **light / dark** theme.
+**App Icon Generator** is a focused web app for turning one source image into **ZIP’d PNG icon sets** for **Android** or **iOS**: upload artwork, tune scaling, shape, effects, padding, and background (including **transparent alpha**), preview on a canvas, then download ready-to-drop-in assets. Server-side image work uses **Sharp**; the UI uses **React**, **Tailwind**, and **Google Sans** with a polished **light / dark** theme.
 
-## Features
+The product direction, design, and implementation follow the same README and PWA patterns as **[Split The G](https://github.com/Rixouu/split-the-g)** — install banner, web app manifest, and a minimal service worker for installability.
 
-- **Platform presets** — Android (6 sizes) or iOS (12 standard point sizes).
-- **Scaling** — *Center (contain)* or *Crop (cover)*, aligned with Sharp’s resize behavior.
-- **Shape** — Square, circle, or squircle (mask applied before export).
-- **Effects** — None, shadow, or gloss (preview matches server output).
-- **Padding** — Uniform padding inside the final square; inner artwork scales to the remaining area.
-- **Background** — Solid fill **or** **transparent export** (PNG alpha for padding and letterboxing).
-- **Live preview** — Canvas preview; checkerboard when background is transparent.
-- **Download** — Single `icons.zip` of PNG files; errors surfaced in the UI when the API returns JSON.
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![React 19](https://img.shields.io/badge/React-19-61dafb)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8)](https://tailwindcss.com/)
+[![Sharp](https://img.shields.io/badge/Sharp-image-99f)](https://sharp.pixelplumbing.com/)
+![PWA](https://img.shields.io/badge/PWA-Install%20banner-7044ff)
 
-## Tech stack
+## ✨ Key Features
 
-| Area | Choice |
-|------|--------|
-| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
-| UI | [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
-| Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
-| Images | [Sharp](https://sharp.pixelplumbing.com/) |
-| Archives | [archiver](https://www.archiverjs.com/) (ZIP) |
-| Lint | [ESLint 9](https://eslint.org/) + `eslint-config-next` |
+### 📤 Upload & platform
 
-## Requirements
+- Drag-and-drop or click to upload **PNG / JPG / WebP**
+- Switch **Android** vs **iOS** preset size grids (no emoji chrome — text-only segmented control)
 
-- **Node.js** 20.x or newer is recommended (matches current Next / ESLint expectations).
-- **npm** (ships with Node).
+### 🖼 Scaling & shape
 
-Sharp installs **platform-specific native binaries**. If you see errors like *Could not load the "sharp" module*, reinstall for your OS/CPU:
+- **Center (contain)** or **Crop (cover)** — preview math matches Sharp’s `fit: 'contain'` / `'cover'`
+- **Square**, **circle**, or **squircle** mask before export
 
-```bash
-npm install --include=optional sharp
-```
+### ✨ Effects & padding
 
-See the [Sharp installation docs](https://sharp.pixelplumbing.com/install) for more options.
+- **None**, **shadow**, or **gloss** — server pipeline ordered for consistent output vs preview
+- **Padding** slider (px) inside the final square asset
 
-## Getting started
+### 🧊 Background & transparency
+
+- Solid **background color** for letterboxing and padding **or**
+- **Transparent export** — PNG keeps **alpha** where there is no artwork (great for store / adaptive icons)
+
+### 👁 Preview & download
+
+- Live **canvas** preview (checkerboard under transparent mode)
+- **Download ZIP** — client checks `Content-Type`; API returns JSON errors inline when generation fails
+- **`/api/generate-icons`** — multipart POST → Sharp → **archiver** ZIP; temp files cleaned in `finally`
+
+### 📱 PWA & install UX
+
+- **`app/manifest.ts`** — `standalone`, theme `#7044ff`, icons from [`public/icon-app-icon-generator.png`](public/icon-app-icon-generator.png)
+- **`public/sw.js`** — minimal service worker (installability hook; **no offline cache**)
+- **`ServiceWorkerRegister`** — registers the SW in **production** only
+- **`PwaInstallBanner`** — Chrome **`beforeinstallprompt`** + **Install** button; iOS fallback with **Add to Home Screen** copy; snooze + installed flags in `localStorage` (same idea as Split The G)
+
+### 🌓 Theme
+
+- **`ThemeSync`** toggles `class="dark"` on `<html>` for Tailwind `darkMode: 'class'`
+- CSS variables for surfaces, borders, and typography
+
+## 🛠 Tech Stack
+
+### Frontend
+
+- **React 19**
+- **Next.js 16** (App Router, **Turbopack** dev)
+- **TypeScript 5**
+- **Tailwind CSS 3**
+- **Google Sans** ([Google Fonts](https://fonts.google.com/specimen/Google+Sans))
+
+### Server
+
+- **Sharp** — resize, mask, effects, flatten vs transparent PNG
+- **archiver** — ZIP stream for download
+
+### Quality
+
+- **ESLint 9** + **`eslint-config-next`** (`eslint.config.mjs`)
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js 20+** (recommended; aligns with Next / ESLint toolchains)
+- **npm**
+
+### Installation
 
 ```bash
 git clone https://github.com/Rixouu/app-icon-generator.git
@@ -46,45 +86,115 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Default dev URL: **http://localhost:3000**
 
-### Scripts
+### Sharp native module
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Development server (Turbopack) |
-| `npm run build` | Production build |
-| `npm start` | Run production server (after `build`) |
-| `npm run lint` | ESLint (`eslint .`, flat config) |
+If you see *Could not load the "sharp" module* for your OS/CPU:
 
-## How it works
-
-1. The browser **POST**s `multipart/form-data` to `/api/generate-icons` with the image file, platform key, and JSON **settings**.
-2. The route writes a temporary upload, calls **`generateIcons()`** in [`utils/IconGenerator.ts`](utils/IconGenerator.ts), then streams a **ZIP** of PNGs.
-3. **Sharp** resizes, masks, applies effects, extends padding, then either **flattens** to a solid background or writes **transparent** PNGs.
-4. Temp upload and generated files under `temp/` are removed in a **`finally`** block.
-
-`next.config.mjs` lists **`sharp`** and **`archiver`** in **`serverExternalPackages`** so they are not bundled incorrectly on the server.
-
-## Project layout
-
-```
-app/
-  api/generate-icons/route.ts   # POST handler + ZIP response
-  components/                   # UI pieces (preview, settings, theme sync, …)
-  globals.css                   # Theme tokens + Google Sans import
-  layout.tsx
-  page.tsx
-utils/
-  IconGenerator.ts              # Sharp pipeline
+```bash
+npm install --include=optional sharp
 ```
 
-## Deployment notes
+See [Sharp — installation](https://sharp.pixelplumbing.com/install).
 
-- The app expects a **Node** runtime (filesystem temp paths, native Sharp).
-- Ensure the host installs **optional dependencies** so Sharp matches the deployment OS/architecture.
-- Do not commit **`.next/`** or **`node_modules/`**; they are listed in `.gitignore`.
+### Environment variables
 
-## Contributing
+No `.env` is required for local icon generation. Add secrets here only if you extend the app (e.g. analytics, auth).
 
-Issues and pull requests are welcome. Please run **`npm run build`** and **`npm run lint`** before submitting changes.
+## 📁 Project structure
+
+```txt
+app-icon-generator/
+├── app/
+│   ├── api/generate-icons/route.ts   # POST → ZIP
+│   ├── components/                   # UI, ThemeSync, PwaInstallBanner, ServiceWorkerRegister, …
+│   ├── manifest.ts                   # Web app manifest (PWA)
+│   ├── globals.css                   # Theme tokens + Google Sans @import
+│   ├── layout.tsx                    # Metadata, viewport, SW registration
+│   └── page.tsx                      # Main flow + install banner
+├── public/
+│   ├── icon-app-icon-generator.png   # App + PWA icon
+│   └── sw.js                         # Minimal service worker
+├── utils/
+│   └── IconGenerator.ts              # Sharp pipeline
+├── next.config.mjs                   # serverExternalPackages: sharp, archiver
+├── eslint.config.mjs
+├── tailwind.config.ts
+└── package.json                      # overrides: postcss ^8.5.10 (audit hygiene)
+```
+
+## 🔧 Available scripts
+
+### Development
+
+```bash
+npm run dev              # Next dev (Turbopack)
+```
+
+### Build / run
+
+```bash
+npm run build            # Production build
+npm start                # next start (after build)
+```
+
+### Code quality
+
+```bash
+npm run lint             # eslint .
+```
+
+## 🌟 Deep dive
+
+### 🧠 Sharp pipeline
+
+Resize → optional shape mask → shadow / gloss → pad with transparent margin → **flatten** (opaque) **or** PNG with alpha.
+
+### 🗜 ZIP API
+
+- Validates file + JSON settings
+- Streams archive; handles empty icon list with JSON error
+- Uses **`Uint8Array`** for `NextResponse` body typing on Next 16
+
+### 🔐 Security notes
+
+- **Do not** expose Sharp to untrusted huge payloads without size limits in production (consider `bodySizeLimit` / reverse proxy limits).
+- Keep **Sharp** and **archiver** **externalized** in `next.config.mjs` so native bindings load correctly.
+
+## 📊 Performance & SEO
+
+- Static shell for `/`; API route is dynamic
+- `metadata` + **viewport `themeColor`** aligned with brand purple `#7044ff`
+
+## 🚀 Deployment
+
+```bash
+npm run build
+npm start
+```
+
+Deploy on any **Node** host that supports the **Next** standalone or default server output. Ensure **Sharp** optional binaries match the deployment platform. **HTTPS** (or localhost) is required for PWA install prompts.
+
+## 🤝 Contributing
+
+1. Run **`npm run lint`** and **`npm run build`**
+2. Open a PR describing UI vs server changes
+
+## 📄 License
+
+No `LICENSE` file is included in this repository; usage terms are at the maintainer’s discretion.
+
+## 👥 Team
+
+- **Jonathan** — Lead Developer — [Rixouu](https://github.com/Rixouu)
+
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org/) team for the App Router and metadata APIs
+- [Sharp](https://sharp.pixelplumbing.com/) for fast image pipelines
+- [Split The G](https://github.com/Rixouu/split-the-g) for README + PWA install UX inspiration
+
+---
+
+**Built with care for designers and devs shipping real app icons.**

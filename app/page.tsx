@@ -8,6 +8,7 @@ import FileUpload from './components/FileUpload';
 import type { IconSettingsType } from './components/types';
 import DownloadSection from './components/DownloadSection';
 import { ThemeSync } from './components/ThemeSync';
+import { PwaInstallBanner } from './components/PwaInstallBanner';
 
 export default function Home() {
   const [iconType, setIconType] = useState<'android' | 'ios'>('android');
@@ -99,6 +100,7 @@ export default function Home() {
   return (
     <>
       <ThemeSync isDark={isDarkMode} />
+      <PwaInstallBanner />
       <div className="min-h-screen bg-background">
         <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14">
           <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
