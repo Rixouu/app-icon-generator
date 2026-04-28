@@ -18,15 +18,15 @@ const IconTypeSelector: React.FC<IconTypeSelectorProps> = ({
           Pick the asset target before exporting.
         </p>
       </div>
-      <div className="grid grid-cols-4 gap-2 rounded-2xl bg-muted/50 p-1.5">
+      <div className="grid grid-cols-4 gap-2 rounded-2xl border border-border bg-muted p-1.5 shadow-sm">
         {(['android', 'ios', 'web', 'all'] as const).map((type) => (
           <button
             key={type}
             type="button"
             className={`rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
               selectedType === type
-                ? 'bg-card text-foreground shadow-sm'
-                : 'text-muted-foreground hover:bg-card/60 hover:text-foreground'
+                ? 'bg-card text-foreground shadow-sm ring-1 ring-border'
+                : 'text-muted-foreground hover:bg-card/70 hover:text-foreground'
             }`}
             onClick={() => onTypeChange(type)}
           >

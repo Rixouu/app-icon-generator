@@ -2,8 +2,6 @@
 
 **App Icon Generator** is a focused web app for building **platform-ready icon packs** for **Android**, **iOS**, and the **web / PWA**. Start from an uploaded image, curated clipart, or text, tune the foreground, background, shape, and badge, preview the result on-canvas, then download a ZIP with production-ready PNG assets. Server-side image work uses **Sharp**; the UI uses **React**, **Tailwind**, and **Google Sans** with a polished **light / dark** theme.
 
-The product direction, design, and implementation follow the same README and PWA patterns as **[Split The G](https://github.com/Rixouu/split-the-g)** — install banner, web app manifest, and a minimal service worker for installability.
-
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)](https://www.typescriptlang.org/)

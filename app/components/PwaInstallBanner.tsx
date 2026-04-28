@@ -170,7 +170,7 @@ export function PwaInstallBanner() {
   if (!visible) return null;
 
   const shellClass =
-    'fixed bottom-[max(0.75rem,env(safe-area-inset-bottom,0px))] left-3 right-3 z-[100] rounded-[22px] border border-black/10 bg-white p-4 text-slate-900 shadow-[0_14px_40px_rgba(15,23,42,0.18)] sm:left-1/2 sm:right-auto sm:w-[min(640px,calc(100vw-1.5rem))] sm:-translate-x-1/2';
+    'fixed bottom-[calc(max(0.75rem,env(safe-area-inset-bottom,0px))+var(--mobile-nav-offset))] left-3 right-3 z-[100] rounded-[22px] border border-black/10 bg-white p-4 text-slate-900 shadow-[0_14px_40px_rgba(15,23,42,0.18)] sm:left-1/2 sm:right-auto sm:w-[min(640px,calc(100vw-1.5rem))] sm:-translate-x-1/2';
 
   if (showIos) {
     return (

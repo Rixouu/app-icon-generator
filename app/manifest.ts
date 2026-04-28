@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'App Icon Generator',
     short_name: 'Icon Gen',
     description:
-      'Upload artwork, tune scaling, shape, and effects, then download Android or iOS PNG icon sets as a ZIP.',
+      'Create Android, iOS, and web/PWA icon packs from uploaded art, clipart, or text, then export platform-ready assets as a ZIP.',
     start_url: '/',
     display: 'standalone',
     orientation: 'portrait-primary',
