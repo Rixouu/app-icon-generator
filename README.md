@@ -1,6 +1,6 @@
 # 🎨 App Icon Generator
 
-**App Icon Generator** is a focused web app for turning one source image into **ZIP’d PNG icon sets** for **Android** or **iOS**: upload artwork, tune scaling, shape, effects, padding, and background (including **transparent alpha**), preview on a canvas, then download ready-to-drop-in assets. Server-side image work uses **Sharp**; the UI uses **React**, **Tailwind**, and **Google Sans** with a polished **light / dark** theme.
+**App Icon Generator** is a focused web app for building **platform-ready icon packs** for **Android**, **iOS**, and the **web / PWA**. Start from an uploaded image, curated clipart, or text, tune the foreground, background, shape, and badge, preview the result on-canvas, then download a ZIP with production-ready PNG assets. Server-side image work uses **Sharp**; the UI uses **React**, **Tailwind**, and **Google Sans** with a polished **light / dark** theme.
 
 The product direction, design, and implementation follow the same README and PWA patterns as **[Split The G](https://github.com/Rixouu/split-the-g)** — install banner, web app manifest, and a minimal service worker for installability.
 
@@ -13,29 +13,30 @@ The product direction, design, and implementation follow the same README and PWA
 
 ## ✨ Key Features
 
-### 📤 Upload & platform
+### 📤 Sources & platform targets
 
 - Drag-and-drop or click to upload **PNG / JPG / WebP**
-- Switch **Android** vs **iOS** preset size grids (no emoji chrome — text-only segmented control)
+- Use **uploaded image**, **clipart**, or **text** as the foreground source
+- Switch between **Android**, **iOS**, **Web**, or **All** export targets
 
-### 🖼 Scaling & shape
+### 🧩 Clipart & badge tools
 
-- **Center (contain)** or **Crop (cover)** — preview math matches Sharp’s `fit: 'contain'` / `'cover'`
-- **Square**, **circle**, or **squircle** mask before export
+- Curated **clipart catalog** with search, categories, and featured quick picks
+- **Badge presets** such as `NEW`, `BETA`, `PRO`, and `AI`
+- Fully editable badge text, colors, and position
 
-### ✨ Effects & padding
+### 🖼 Background, shape & finishing
 
-- **None**, **shadow**, or **gloss** — server pipeline ordered for consistent output vs preview
-- **Padding** slider (px) inside the final square asset
+- Solid, **gradient**, **mesh**, or dedicated **background image** layer
+- Optional **transparent export** for PNG alpha output
+- **Square**, **circle**, **squircle**, or **rounded** mask
+- **Padding**, **shadow**, and **gloss** controls with preview parity
 
-### 🧊 Background & transparency
+### 👁 Preview, export & layout
 
-- Solid **background color** for letterboxing and padding **or**
-- **Transparent export** — PNG keeps **alpha** where there is no artwork (great for store / adaptive icons)
-
-### 👁 Preview & download
-
-- Live **canvas** preview (checkerboard under transparent mode)
+- Live **canvas** preview of the final export render
+- **Desktop workflow**: large preview workspace with dedicated editor rail
+- **Mobile / PWA workflow**: separate **Preview / Edit / Export** views for easier use on phones
 - **Download ZIP** — client checks `Content-Type`; API returns JSON errors inline when generation fails
 - **`/api/generate-icons`** — multipart POST → Sharp → **archiver** ZIP; temp files cleaned in `finally`
 
@@ -108,16 +109,17 @@ No `.env` is required for local icon generation. Add secrets here only if you ex
 app-icon-generator/
 ├── app/
 │   ├── api/generate-icons/route.ts   # POST → ZIP
-│   ├── components/                   # UI, ThemeSync, PwaInstallBanner, ServiceWorkerRegister, …
+│   ├── components/                   # UI, preview, settings, PWA install banner, …
 │   ├── manifest.ts                   # Web app manifest (PWA)
 │   ├── globals.css                   # Theme tokens + Google Sans @import
 │   ├── layout.tsx                    # Metadata, viewport, SW registration
-│   └── page.tsx                      # Main flow + install banner
+│   └── page.tsx                      # Desktop + mobile workflow shell
 ├── public/
 │   ├── icon-app-icon-generator.png   # App + PWA icon
 │   └── sw.js                         # Minimal service worker
 ├── utils/
-│   └── IconGenerator.ts              # Sharp pipeline
+│   ├── IconGenerator.ts              # Sharp pipeline
+│   └── iconStudio.ts                 # Shared platform exports, clipart, presets, defaults
 ├── next.config.mjs                   # serverExternalPackages: sharp, archiver
 ├── eslint.config.mjs
 ├── tailwind.config.ts
@@ -149,13 +151,19 @@ npm run lint             # eslint .
 
 ### 🧠 Sharp pipeline
 
-Resize → optional shape mask → shadow / gloss → pad with transparent margin → **flatten** (opaque) **or** PNG with alpha.
+Background composition → foreground source render → optional shape mask → shadow / gloss → PNG export with opaque or alpha output depending on settings.
 
 ### 🗜 ZIP API
 
 - Validates file + JSON settings
 - Streams archive; handles empty icon list with JSON error
 - Uses **`Uint8Array`** for `NextResponse` body typing on Next 16
+
+### 📦 Export coverage
+
+- **Android**: launcher PNG sizes plus Play Store asset
+- **iOS**: App Store / iPhone / iPad icon matrix
+- **Web / PWA**: favicon set, Apple touch icon, and manifest icons
 
 ### 🔐 Security notes
 

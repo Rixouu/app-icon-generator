@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { IconSettingsType } from '@/app/components/types';
 import { generateIcons } from '@/utils/IconGenerator';
-import fs from 'fs/promises';
+import { getPlatformLabel, type PlatformType } from '@/utils/iconStudio';
 import archiver from 'archiver';
 
 export async function GET() {
@@ -9,17 +9,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const tempPaths: string[] = [];
-
   try {
     const formData = await req.formData();
     const iconType = formData.get('iconType') as string;
     const settingsRaw = formData.get('settings') as string;
     const file = formData.get('file') as File | null;
-
-    if (!file || !(file instanceof Blob)) {
-      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
-    }
+    const backgroundFile = formData.get('backgroundFile') as File | null;
 
     let settings: IconSettingsType;
     try {
@@ -28,17 +23,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid settings JSON' }, { status: 400 });
     }
 
-    const tempFilePath = `/tmp/uploaded_image_${Date.now()}.png`;
-    tempPaths.push(tempFilePath);
-
-    const arrayBuffer = await file.arrayBuffer();
-    await fs.writeFile(tempFilePath, new Uint8Array(arrayBuffer));
-
-    const icons = await generateIcons(tempFilePath, { ...settings, iconType });
-
-    for (const icon of icons) {
-      tempPaths.push(icon.path);
-    }
+    const sourceBuffer =
+      file && file instanceof Blob ? Buffer.from(await file.arrayBuffer()) : null;
+    const backgroundBuffer =
+      backgroundFile && backgroundFile instanceof Blob
+        ? Buffer.from(await backgroundFile.arrayBuffer())
+        : null;
+    const icons = await generateIcons(
+      sourceBuffer,
+      backgroundBuffer,
+      settings,
+      iconType as PlatformType,
+    );
 
     if (icons.length === 0) {
       return NextResponse.json(
@@ -57,8 +53,7 @@ export async function POST(req: NextRequest) {
     });
 
     for (const icon of icons) {
-      const fileContent = await fs.readFile(icon.path);
-      archive.append(fileContent, { name: icon.name });
+      archive.append(icon.content, { name: icon.name });
     }
 
     await archive.finalize();
@@ -70,7 +65,7 @@ export async function POST(req: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'application/zip',
-        'Content-Disposition': 'attachment; filename=icons.zip',
+        'Content-Disposition': `attachment; filename=${getPlatformLabel(iconType as PlatformType).toLowerCase().replaceAll(' ', '-')}-icons.zip`,
       },
     });
   } catch (error) {
@@ -80,14 +75,6 @@ export async function POST(req: NextRequest) {
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },
-    );
-  } finally {
-    await Promise.all(
-      tempPaths.map((p) =>
-        fs.unlink(p).catch(() => {
-          /* ignore */
-        }),
-      ),
     );
   }
 }

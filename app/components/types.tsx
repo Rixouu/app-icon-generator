@@ -1,30 +1,10 @@
-// Icon Settings
-export interface IconSettingsType {
-  background: {
-    color: string;
-    /** When true, exported PNGs keep alpha; padding and letterboxing are transparent. */
-    transparent?: boolean;
-    type: 'solid' | 'gradient';
-    gradient?: {
-      type: 'linear' | 'radial';
-      colors: string[];
-      angle?: number; // for linear gradients
-    };
-  };
-  icon: {
-    url: string;
-    color?: string;
-  };
-  padding: number;
-  scaling: 'center' | 'crop' | 'fit';
-  shape: 'square' | 'circle' | 'squircle' | 'rounded';
-  effect: 'none' | 'shadow' | 'gloss' | 'reflection';
-  borderRadius?: number; // for 'rounded' shape
-}
+import type { IconSettingsType as SharedIconSettingsType, PlatformType } from '@/utils/iconStudio';
+
+export type IconSettingsType = SharedIconSettingsType;
 
 // Preview Options
 export interface PreviewOptionsType {
-  platform: 'ios' | 'android' | 'web';
+  platform: PlatformType;
   size: number;
   darkMode: boolean;
 }
@@ -33,7 +13,7 @@ export interface PreviewOptionsType {
 export interface GeneratedIconType {
   url: string;
   size: number;
-  platform: 'ios' | 'android' | 'web';
+  platform: PlatformType;
 }
 
 // API Response
@@ -63,14 +43,15 @@ export interface ProjectType {
 export interface ExportOptionsType {
   format: 'png' | 'jpg' | 'svg';
   sizes: number[];
-  platforms: ('ios' | 'android' | 'web')[];
+  platforms: PlatformType[];
   includeMetadata: boolean;
 }
 
 // Component Props
 export interface IconPreviewProps {
-  iconType: 'android' | 'ios' | 'web';
+  iconType: PlatformType;
   uploadedImage: File | null;
+  backgroundImage: File | null;
   settings: IconSettingsType;
   size?: number;
 }

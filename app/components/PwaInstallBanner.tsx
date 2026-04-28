@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const STORAGE_INSTALLED = 'app-icon-gen-pwa-installed';
@@ -168,30 +169,40 @@ export function PwaInstallBanner() {
 
   if (!visible) return null;
 
-  const host = typeof window !== 'undefined' ? window.location.host : '';
-
   const shellClass =
-    'fixed left-3 right-3 top-[max(0.5rem,env(safe-area-inset-top,0px))] z-[100] rounded-2xl border border-border bg-card/95 p-4 shadow-lg backdrop-blur-md supports-[backdrop-filter]:bg-card/80';
+    'fixed bottom-[max(0.75rem,env(safe-area-inset-bottom,0px))] left-3 right-3 z-[100] rounded-[22px] border border-black/10 bg-white p-4 text-slate-900 shadow-[0_14px_40px_rgba(15,23,42,0.18)] sm:left-1/2 sm:right-auto sm:w-[min(640px,calc(100vw-1.5rem))] sm:-translate-x-1/2';
 
   if (showIos) {
     return (
       <div className={shellClass} role="region" aria-label="Install app">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold text-foreground">Add to Home Screen</p>
-            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-              Install <span className="font-medium text-foreground">App Icon Generator</span> for
-              quick access from your home screen.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">{iosInstructions(iosFlavor)}</p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-sm">
+              <Image
+                src="/icon-app-icon-generator.png"
+                alt="App Icon Generator icon"
+                width={52}
+                height={52}
+                className="h-[52px] w-[52px]"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-slate-900">Install App Icon Generator</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
+                Add this tool to your home screen for faster access.
+              </p>
+              <p className="mt-1.5 text-xs text-slate-600">{iosInstructions(iosFlavor)}</p>
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={dismiss}
-            className="mt-2 shrink-0 self-end rounded-lg border border-border bg-muted px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted/80 sm:mt-0"
-          >
-            Not now
-          </button>
+          <div className="flex shrink-0 items-center gap-2 self-end sm:self-auto">
+            <button
+              type="button"
+              onClick={dismiss}
+              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            >
+              Not now
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -200,11 +211,22 @@ export function PwaInstallBanner() {
   return (
     <div className={shellClass} role="region" aria-label="Install app">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold text-foreground">Install App Icon Generator</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            {host} — add this tool to your home screen or app launcher.
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-sm">
+            <Image
+              src="/icon-app-icon-generator.png"
+              alt="App Icon Generator icon"
+              width={52}
+              height={52}
+              className="h-[52px] w-[52px]"
+            />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-900">Install App Icon Generator</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
+              Add this tool to your home screen or app launcher.
+            </p>
+          </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <button
@@ -218,7 +240,7 @@ export function PwaInstallBanner() {
           <button
             type="button"
             onClick={dismiss}
-            className="rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
           >
             Not now
           </button>

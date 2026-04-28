@@ -2,9 +2,21 @@ import React, { useRef, useState } from 'react';
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
+  title?: string;
+  description?: string;
+  selectedFileName?: string | null;
+  onClear?: () => void;
+  className?: string;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
+const FileUpload: React.FC<FileUploadProps> = ({
+  onFileUpload,
+  title = 'Drop an image here',
+  description = 'or click to browse — PNG, JPG, WebP',
+  selectedFileName,
+  onClear,
+  className = 'mb-6',
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
 
@@ -32,23 +44,15 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
   return (
     <div
-      className={`mb-6 w-full cursor-pointer rounded-xl border-2 border-dashed p-6 transition-colors ${
+      className={`${className} w-full cursor-pointer rounded-2xl border-2 border-dashed p-5 transition-colors ${
         dragActive
           ? 'border-ring bg-muted'
-          : 'border-border bg-muted/40 hover:bg-muted/70'
+          : 'border-border bg-muted/30 hover:bg-muted/50'
       }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={() => fileInputRef.current?.click()}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          fileInputRef.current?.click();
-        }
-      }}
-      role="button"
-      tabIndex={0}
     >
       <input
         type="file"
@@ -59,8 +63,30 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         aria-label="Upload image file"
       />
       <div className="text-center">
-        <p className="text-sm font-medium text-foreground">Drop an image here</p>
-        <p className="mt-1 text-xs text-muted-foreground">or click to browse — PNG, JPG, WebP</p>
+        <p className="text-sm font-medium text-foreground">{title}</p>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{description}</p>
+        {selectedFileName ? (
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <span className="max-w-[200px] truncate rounded-full border border-border bg-card px-2.5 py-1 text-xs text-foreground">
+              {selectedFileName}
+            </span>
+            {onClear ? (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onClear();
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                  }
+                }}
+                className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Remove
+              </button>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );
