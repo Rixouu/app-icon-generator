@@ -28,6 +28,7 @@ interface SectionCardProps {
 
 const inputClass =
   'w-full rounded-2xl border border-border bg-background px-3.5 py-3 text-sm text-foreground transition-colors outline-none focus:ring-2 focus:ring-ring/30';
+const selectClass = `${inputClass} appearance-none pr-12 [background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%239aa3b5' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 8 4 4 4-4'/%3E%3C/svg%3E")] [background-position:right_1rem_center] [background-repeat:no-repeat] [background-size:16px_16px]`;
 
 const labelClass = 'mb-2 block text-sm font-medium text-foreground/95';
 const chipClass =
@@ -174,7 +175,7 @@ const IconSettings: React.FC<IconSettingsProps> = ({
                   },
                 })
               }
-              className={inputClass}
+              className={selectClass}
             >
               <option value="image">Uploaded image</option>
               <option value="clipart">Clipart</option>
@@ -335,7 +336,7 @@ const IconSettings: React.FC<IconSettingsProps> = ({
                     },
                   })
                 }
-                className={inputClass}
+                className={selectClass}
                 placeholder="AI"
               />
             </div>
@@ -701,7 +702,7 @@ const IconSettings: React.FC<IconSettingsProps> = ({
                   shape: e.target.value as 'square' | 'circle' | 'squircle' | 'rounded',
                 })
               }
-              className={inputClass}
+              className={selectClass}
             >
               <option value="square">Square</option>
               <option value="circle">Circle</option>
@@ -740,7 +741,7 @@ const IconSettings: React.FC<IconSettingsProps> = ({
               onChange={(e) =>
                 onSettingsChange({ effect: e.target.value as 'none' | 'shadow' | 'gloss' })
               }
-              className={inputClass}
+              className={selectClass}
             >
               <option value="none">None</option>
               <option value="shadow">Shadow</option>
@@ -852,7 +853,7 @@ const IconSettings: React.FC<IconSettingsProps> = ({
                       },
                     })
                   }
-                  className={inputClass}
+                  className={selectClass}
                   placeholder="NEW"
                 />
               </div>

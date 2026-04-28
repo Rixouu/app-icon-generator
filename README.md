@@ -7,7 +7,7 @@ The product direction, design, and implementation follow the same README and PWA
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8)](https://tailwindcss.com/)
 [![Sharp](https://img.shields.io/badge/Sharp-image-99f)](https://sharp.pixelplumbing.com/)
 ![PWA](https://img.shields.io/badge/PWA-Install%20banner-7044ff)
 
@@ -49,7 +49,7 @@ The product direction, design, and implementation follow the same README and PWA
 
 ### 🌓 Theme
 
-- **`ThemeSync`** toggles `class="dark"` on `<html>` for Tailwind `darkMode: 'class'`
+- **`ThemeSync`** toggles `class="dark"` on `<html>` for Tailwind 4 custom dark variant styling
 - CSS variables for surfaces, borders, and typography
 
 ## 🛠 Tech Stack
@@ -59,7 +59,7 @@ The product direction, design, and implementation follow the same README and PWA
 - **React 19**
 - **Next.js 16** (App Router, **Turbopack** dev)
 - **TypeScript 5**
-- **Tailwind CSS 3**
+- **Tailwind CSS 4**
 - **Google Sans** ([Google Fonts](https://fonts.google.com/specimen/Google+Sans))
 
 ### Server
@@ -87,7 +87,7 @@ npm install
 npm run dev
 ```
 
-Default dev URL: **http://localhost:3000**
+Default dev URL: [http://localhost:3000](http://localhost:3000)
 
 ### Sharp native module
 
@@ -201,7 +201,6 @@ No `LICENSE` file is included in this repository; usage terms are at the maintai
 
 - [Next.js](https://nextjs.org/) team for the App Router and metadata APIs
 - [Sharp](https://sharp.pixelplumbing.com/) for fast image pipelines
-
 
 ---
 
