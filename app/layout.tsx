@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ServiceWorkerRegister } from './components/ServiceWorkerRegister';
 
-const THEME = '#6A3DE8';
+const THEME = '#0A0B14';
 
 export const metadata: Metadata = {
   title: 'App Icon Generator',

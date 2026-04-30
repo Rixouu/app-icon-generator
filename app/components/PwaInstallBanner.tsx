@@ -170,37 +170,51 @@ export function PwaInstallBanner() {
   if (!visible) return null;
 
   const shellClass =
-    'fixed bottom-[calc(max(0.75rem,env(safe-area-inset-bottom,0px))+var(--mobile-nav-offset))] left-3 right-3 z-[100] rounded-[22px] border border-black/10 bg-white p-4 text-slate-900 shadow-[0_14px_40px_rgba(15,23,42,0.18)] sm:left-1/2 sm:right-auto sm:w-[min(640px,calc(100vw-1.5rem))] sm:-translate-x-1/2';
+    'fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px)+var(--mobile-nav-offset))] left-4 right-4 z-[100] sm:left-1/2 sm:right-auto sm:w-[min(560px,calc(100vw-2rem))] sm:-translate-x-1/2';
+  const panelClass =
+    'flex items-center justify-between gap-4 rounded-[20px] border border-black/5 bg-white/90 p-4 text-slate-900 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] backdrop-blur-2xl';
 
   if (showIos) {
     return (
       <div className={shellClass} role="region" aria-label="Install app">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className={panelClass}>
           <div className="flex min-w-0 items-center gap-3">
-            <div className="overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-sm">
+            <div className="h-11 w-11 overflow-hidden rounded-xl shadow-[0_8px_12px_-3px_rgba(0,0,0,0.12)]">
               <Image
                 src="/icon-app-icon-generator.png"
                 alt="App Icon Generator icon"
-                width={52}
-                height={52}
-                className="h-[52px] w-[52px]"
+                width={44}
+                height={44}
+                className="h-11 w-11"
               />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-900">Install App Icon Generator</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
-                Add this tool to your home screen for faster access.
+              <p className="text-sm font-bold text-slate-900">Install App Icon Generator</p>
+              <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500">
+                Add to home screen for the best experience
               </p>
-              <p className="mt-1.5 text-xs text-slate-600">{iosInstructions(iosFlavor)}</p>
+              <p className="mt-2 text-[10px] text-slate-500">{iosInstructions(iosFlavor)}</p>
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-2 self-end sm:self-auto">
+          <div className="flex shrink-0 items-center gap-2">
+            <div className="hidden items-center gap-1 text-[10px] text-slate-500 sm:flex">
+              <span>Tap</span>
+              <svg viewBox="0 0 24 24" className="h-4 w-4 text-[#0A0B14]" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 16V4" />
+                <path d="M8 8l4-4 4 4" />
+                <path d="M20 12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7" />
+              </svg>
+              <span>then “Add to Home Screen”</span>
+            </div>
             <button
               type="button"
               onClick={dismiss}
-              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-slate-400 transition-colors hover:bg-black/5 hover:text-slate-900"
+              aria-label="Dismiss"
             >
-              Not now
+              <svg viewBox="0 0 20 20" className="h-[18px] w-[18px] fill-current" aria-hidden="true">
+                <path d="M4.22 4.22a.75.75 0 0 1 1.06 0L10 8.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L11.06 10l4.72 4.72a.75.75 0 0 1-1.06 1.06L10 11.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L8.94 10 4.22 5.28a.75.75 0 0 1 0-1.06Z" />
+              </svg>
             </button>
           </div>
         </div>
@@ -210,21 +224,21 @@ export function PwaInstallBanner() {
 
   return (
     <div className={shellClass} role="region" aria-label="Install app">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className={panelClass}>
         <div className="flex min-w-0 items-center gap-3">
-          <div className="overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-sm">
+          <div className="h-11 w-11 overflow-hidden rounded-xl shadow-[0_8px_12px_-3px_rgba(0,0,0,0.12)]">
             <Image
               src="/icon-app-icon-generator.png"
               alt="App Icon Generator icon"
-              width={52}
-              height={52}
-              className="h-[52px] w-[52px]"
+              width={44}
+              height={44}
+              className="h-11 w-11"
             />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-900">Install App Icon Generator</p>
-            <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
-              Add this tool to your home screen or app launcher.
+            <p className="text-sm font-bold text-slate-900">Install App Icon Generator</p>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500">
+              Add to home screen for the best experience
             </p>
           </div>
         </div>
@@ -233,16 +247,19 @@ export function PwaInstallBanner() {
             type="button"
             onClick={() => void onInstallClick()}
             disabled={installing}
-            className="rounded-lg bg-[#7044ff] px-3 py-2 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="rounded-full bg-[#0A0B14] px-5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#121424] disabled:opacity-50 active:scale-[0.96]"
           >
             {installing ? 'Installing…' : 'Install'}
           </button>
           <button
             type="button"
             onClick={dismiss}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-slate-400 transition-colors hover:bg-black/5 hover:text-slate-900"
+            aria-label="Dismiss"
           >
-            Not now
+            <svg viewBox="0 0 20 20" className="h-[18px] w-[18px] fill-current" aria-hidden="true">
+              <path d="M4.22 4.22a.75.75 0 0 1 1.06 0L10 8.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L11.06 10l4.72 4.72a.75.75 0 0 1-1.06 1.06L10 11.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L8.94 10 4.22 5.28a.75.75 0 0 1 0-1.06Z" />
+            </svg>
           </button>
         </div>
       </div>

@@ -215,7 +215,7 @@ export default function Home() {
     <>
       <ThemeSync isDark={isDarkMode} />
       <PwaInstallBanner />
-      <div className="min-h-screen bg-background [--mobile-nav-offset:76px] lg:[--mobile-nav-offset:0px]">
+      <div className="min-h-screen bg-background [--mobile-nav-offset:68px] lg:[--mobile-nav-offset:0px]">
         <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
           <header className="relative mb-6 flex flex-col items-center gap-4 text-center lg:mb-8 lg:flex-row lg:items-end lg:justify-between lg:text-left">
             <button
@@ -331,14 +331,16 @@ export default function Home() {
             role="navigation"
             aria-label="Mobile views"
           >
-            <div className="mx-auto max-w-7xl px-4 pb-[max(env(safe-area-inset-bottom,0px),0.8rem)] pt-2.5">
-              <div className="rounded-[28px] border border-border bg-card/85 p-1.5 shadow-[0_18px_44px_rgba(0,0,0,0.45)] backdrop-blur dark:border-white/10">
-                <div className="relative grid grid-cols-3 gap-2">
+            <div className="mx-auto max-w-7xl px-4 pb-[max(env(safe-area-inset-bottom,0px),0.9rem)] pt-2">
+              <div className="mx-auto w-[88%] max-w-[360px] rounded-[999px] border border-border bg-card/92 px-4 py-2.5 shadow-[0_18px_44px_rgba(15,23,42,0.18)] backdrop-blur dark:border-white/10 dark:bg-[#0A0B14]/95 dark:shadow-[0_18px_44px_rgba(0,0,0,0.55)]">
+                <div className="relative grid grid-cols-3">
                   <div
                     ref={pillRef}
-                    className="pointer-events-none absolute inset-y-0 left-0 w-1/3 rounded-[22px] bg-foreground shadow-[0_10px_26px_rgba(0,0,0,0.35)] motion-reduce:transition-none"
+                    className="pointer-events-none absolute inset-y-0 left-0 flex w-1/3 items-center justify-center motion-reduce:transition-none"
                     aria-hidden="true"
-                  />
+                  >
+                    <div className="h-10 w-10 rounded-full bg-muted shadow-[0_10px_26px_rgba(15,23,42,0.18)] dark:bg-white/10 dark:shadow-[0_10px_26px_rgba(0,0,0,0.3)]" />
+                  </div>
                   {mobileTabs.map((item) => {
                     const selected = mobileView === item.id;
                     return (
@@ -355,20 +357,23 @@ export default function Home() {
                           }
                           setMobileView(item.id);
                         }}
-                        className={`relative z-[1] flex flex-col items-center justify-center gap-0.5 rounded-[22px] px-3 py-2 text-[11px] font-semibold transition-[transform,color] duration-150 active:scale-[0.96] motion-reduce:transition-none ${
-                          selected ? 'text-background' : 'text-muted-foreground hover:text-foreground'
+                        className={`relative z-[1] flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 text-[11px] font-semibold transition-[transform,color,opacity] duration-150 active:scale-[0.94] motion-reduce:transition-none ${
+                          selected
+                            ? 'text-foreground dark:text-white'
+                            : 'text-muted-foreground hover:text-foreground dark:text-white/60 dark:hover:text-white'
                         }`}
                         aria-current={selected ? 'page' : undefined}
+                        aria-label={item.label}
                       >
                         <span
-                          className={`inline-flex h-8 w-8 items-center justify-center rounded-2xl transition-all duration-200 motion-reduce:transition-none ${
-                            selected ? 'bg-white/10 opacity-100 scale-[1.07]' : 'bg-transparent opacity-80 scale-100'
+                          className={`inline-flex h-9 w-9 items-center justify-center rounded-2xl transition-all duration-200 motion-reduce:transition-none ${
+                            selected ? 'opacity-100 scale-[1.06]' : 'opacity-75 scale-100'
                           }`}
                         >
                           {item.id === 'preview' ? (
                             <svg
                               viewBox="0 0 24 24"
-                              className="h-[18px] w-[18px]"
+                              className="h-[20px] w-[20px]"
                               fill="none"
                               stroke="currentColor"
                               strokeWidth="2"
@@ -380,7 +385,7 @@ export default function Home() {
                           {item.id === 'edit' ? (
                             <svg
                               viewBox="0 0 24 24"
-                              className="h-[18px] w-[18px]"
+                              className="h-[20px] w-[20px]"
                               fill="none"
                               stroke="currentColor"
                               strokeWidth="2"
@@ -392,7 +397,7 @@ export default function Home() {
                           {item.id === 'export' ? (
                             <svg
                               viewBox="0 0 24 24"
-                              className="h-[18px] w-[18px]"
+                              className="h-[20px] w-[20px]"
                               fill="none"
                               stroke="currentColor"
                               strokeWidth="2"
@@ -403,10 +408,12 @@ export default function Home() {
                             </svg>
                           ) : null}
                         </span>
-                        <span className={selected ? 'tracking-tight' : undefined}>{item.label}</span>
+                        <span className="sr-only">{item.label}</span>
                         <span
-                          className={`absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition-all duration-200 motion-reduce:transition-none ${
-                            selected ? 'scale-100 opacity-100 bg-background shadow-sm' : 'scale-50 opacity-0 bg-transparent'
+                          className={`absolute -bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition-all duration-200 motion-reduce:transition-none ${
+                            selected
+                              ? 'scale-100 opacity-100 bg-foreground dark:bg-white'
+                              : 'scale-50 opacity-0 bg-transparent'
                           }`}
                           aria-hidden="true"
                         />
