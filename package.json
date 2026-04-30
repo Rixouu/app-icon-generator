@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "archiver": "^7.0.1",
@@ -34,6 +36,7 @@
     "eslint-config-next": "^16.2.1",
     "postcss": "^8.5.10",
     "tailwindcss": "^4.1.13",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }

@@ -145,6 +145,18 @@ npm start                # next start (after build)
 npm run lint             # eslint .
 ```
 
+### Tests
+
+```bash
+npm test
+npm run test:watch
+```
+
+Docs:
+
+- [ARCHITECTURE.md](file:///Users/cto/Documents/Repositories/02-Pro/app-icon-generator/docs/ARCHITECTURE.md)
+- [TESTING.md](file:///Users/cto/Documents/Repositories/02-Pro/app-icon-generator/docs/TESTING.md)
+
 ## 🌟 Deep dive
 
 ### 🧠 Sharp pipeline
