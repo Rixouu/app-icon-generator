@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const THEME = '#0A0B14';
+const THEME = '#07111C';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
