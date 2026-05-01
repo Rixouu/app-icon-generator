@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import IconTypeSelector from './components/IconTypeSelector';
 import IconPreview from './components/IconPreview';
@@ -180,7 +181,17 @@ export default function Home() {
         <div className="border-b border-border bg-card">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between gap-4">
-              <div className="min-w-0">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="overflow-hidden rounded-xl border border-border bg-muted shadow-sm">
+                  <Image
+                    src="/icon-app-icon-generator.png"
+                    alt="App Icon Generator"
+                    width={40}
+                    height={40}
+                    className="h-10 w-10"
+                    priority
+                  />
+                </div>
                 <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
                   App assets
                 </p>
