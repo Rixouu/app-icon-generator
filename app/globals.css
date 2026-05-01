@@ -1,29 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --font-google-sans: 'Google Sans', system-ui, sans-serif;
-  --background: #f4f6fb;
-  --foreground: #0c1222;
-  --muted: #e8ecf4;
-  --muted-foreground: #5c6578;
+  --font-google-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --background: #f4fbfa;
+  --foreground: #07121c;
+  --muted: #e4f1ef;
+  --muted-foreground: #3d7080;
   --card: #ffffff;
-  --card-foreground: #0c1222;
-  --border: #d8dee9;
-  --ring: #3b6cf0;
+  --card-foreground: #07121c;
+  --border: #cfe1df;
+  --ring: #00a898;
 }
 
 .dark {
-  --background: #080c14;
-  --foreground: #eef1f7;
-  --muted: #141b2a;
-  --muted-foreground: #9aa3b5;
-  --card: #0f1522;
-  --card-foreground: #eef1f7;
-  --border: #252f42;
-  --ring: #6b8cff;
+  --background: #07121c;
+  --foreground: #d8ecea;
+  --muted: #0a1e2a;
+  --muted-foreground: #4a7a88;
+  --card: #060f17;
+  --card-foreground: #d8ecea;
+  --border: #0e2535;
+  --ring: #00c0a8;
 }
 
 body {
@@ -34,6 +34,8 @@ body {
 
 @theme inline {
   --font-sans: var(--font-google-sans), system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
@@ -47,6 +49,15 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

@@ -317,42 +317,56 @@ const IconPreview: React.FC<IconPreviewProps> = ({
 
   return (
     <>
-      <div className="mb-5 flex items-start justify-between gap-4">
+      <div className="mb-3 flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-foreground">Preview</p>
-          <p className="mt-1 text-sm text-muted-foreground">{meta}</p>
+          <p className="mt-1 text-[11px] text-muted-foreground">{meta}</p>
         </div>
-        <span className="rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-medium capitalize text-muted-foreground">
+        <span className="rounded-md border border-border bg-muted px-3 py-1 text-[11px] font-medium capitalize text-muted-foreground">
           {settings.effect === 'none' ? 'clean' : settings.effect}
         </span>
       </div>
-      <div className="rounded-[28px] border border-border bg-muted/30 p-3 sm:p-5">
-        <div className="aspect-square w-full rounded-[24px] bg-[linear-gradient(45deg,rgba(148,163,184,0.12)_25%,transparent_25%,transparent_75%,rgba(148,163,184,0.12)_75%,rgba(148,163,184,0.12)),linear-gradient(45deg,rgba(148,163,184,0.12)_25%,transparent_25%,transparent_75%,rgba(148,163,184,0.12)_75%,rgba(148,163,184,0.12))] bg-[length:24px_24px] bg-[position:0_0,12px_12px] p-4 sm:p-8">
-          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[20px] border border-border bg-card">
+      <div className="rounded-2xl border border-border bg-muted p-3">
+        <div className="aspect-square w-full rounded-xl border border-border bg-[repeating-conic-gradient(rgba(7,18,28,0.08)_0%_25%,rgba(7,18,28,0.16)_0%_50%)] bg-[length:20px_20px] p-4 dark:bg-[repeating-conic-gradient(#0B1C28_0%_25%,#0A1620_0%_50%)]">
+          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-lg border border-border bg-card">
             {hasRenderableSource ? (
               <canvas ref={canvasRef} className="h-auto max-h-full w-full max-w-full object-contain" />
             ) : (
-              <p className="px-6 text-center text-sm text-muted-foreground">
-                Upload a source image
-                <br />
-                to render the export preview
-              </p>
+              <div className="px-6 text-center">
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-muted">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="4" />
+                    <path d="M12 8v8M8 12h8" />
+                  </svg>
+                </div>
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  Upload a source image
+                  <br />
+                  to render the export preview
+                </p>
+              </div>
             )}
           </div>
         </div>
       </div>
-      <div className="mt-4 grid gap-3 text-sm text-muted-foreground sm:grid-cols-3">
-        <div className="rounded-2xl bg-muted/40 px-4 py-3">
-          <span className="block text-xs uppercase tracking-wide text-muted-foreground">Platform</span>
-          <span className="mt-1 block font-medium text-foreground">{platformLabel}</span>
+      <div className="mt-3 flex border-t border-border">
+        <div className="flex-1 border-r border-border px-3 py-2">
+          <span className="block text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            Platform
+          </span>
+          <span className="mt-1 block text-xs font-medium text-foreground">{platformLabel}</span>
         </div>
-        <div className="rounded-2xl bg-muted/40 px-4 py-3">
-          <span className="block text-xs uppercase tracking-wide text-muted-foreground">Shape</span>
-          <span className="mt-1 block font-medium capitalize text-foreground">{settings.shape}</span>
+        <div className="flex-1 border-r border-border px-3 py-2">
+          <span className="block text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            Shape
+          </span>
+          <span className="mt-1 block text-xs font-medium capitalize text-foreground">{settings.shape}</span>
         </div>
-        <div className="rounded-2xl bg-muted/40 px-4 py-3">
-          <span className="block text-xs uppercase tracking-wide text-muted-foreground">Padding</span>
-          <span className="mt-1 block font-medium text-foreground">{settings.padding}%</span>
+        <div className="flex-1 px-3 py-2">
+          <span className="block text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            Padding
+          </span>
+          <span className="mt-1 block text-xs font-medium text-foreground">{settings.padding}%</span>
         </div>
       </div>
     </>

@@ -35,32 +35,32 @@ const DownloadSection: React.FC<DownloadSectionProps> = ({ onDownload, disabled,
 
   return (
     <>
-      <h2 className="mb-2 text-xl font-semibold tracking-tight text-foreground">Export</h2>
-      <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
+      <h2 className="mb-2 text-sm font-medium text-foreground">Export</h2>
+      <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
         One ZIP with a production-ready {platform} asset pack and platform-specific filenames.
       </p>
-      <div className="mb-6 rounded-2xl border border-border bg-muted/30 p-4">
-        <p className="text-sm font-medium text-foreground">{summary.title}</p>
-        <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mb-4 rounded-2xl border border-border bg-muted p-3">
+        <p className="text-xs font-medium text-foreground">{summary.title}</p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
           {summary.lines.map((line) => (
             <span
               key={line}
-              className="rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground"
+              className="rounded-full border border-border bg-card px-2.5 py-1 text-[10px] text-muted-foreground"
             >
               {line}
             </span>
           ))}
         </div>
       </div>
-      <div className="mb-6">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <div className="mb-4">
+        <p className="mb-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
           Sizes (px)
         </p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {iconSizes.map((size) => (
             <span
               key={size}
-              className="rounded-full border border-border bg-muted/50 px-2.5 py-1 font-mono text-xs text-foreground"
+              className="rounded-md border border-border bg-background px-2 py-1 font-mono text-[10px] text-muted-foreground"
             >
               {size}×{size}
             </span>
