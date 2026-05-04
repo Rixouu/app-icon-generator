@@ -192,15 +192,14 @@ export default function Home() {
                     priority
                   />
                 </div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  App assets
-                </p>
-                <h1 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
-                  Icon generator
-                </h1>
-                <p className="mt-1 hidden max-w-2xl text-xs leading-relaxed text-muted-foreground sm:block">
-                  Create Android, iOS, and web icon packs with uploaded art, clipart, or text.
-                </p>
+                <div className="min-w-0">
+                  <h1 className="text-lg font-semibold tracking-tight text-foreground">
+                    Icon generator
+                  </h1>
+                  <p className="mt-1 hidden max-w-2xl text-xs leading-relaxed text-muted-foreground sm:block">
+                    Create Android, iOS, and web icon packs with uploaded art, clipart, or text.
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
